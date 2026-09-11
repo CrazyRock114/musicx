@@ -286,10 +286,6 @@ export class MobileLayoutManager {
         });
       }
     }
-
-    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
-      setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
-    }
   }
 
   /**
@@ -360,10 +356,6 @@ export class MobileLayoutManager {
     callouts.forEach(c => {
       c.style.display = '';
     });
-
-    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
-      setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
-    }
   }
 
   /**

@@ -40,6 +40,10 @@ class HarmonixApp {
   constructor() {
     this.instances = {};
     this.activeTab = 'games'; // Start on the thrilling mini-games section first!
+
+    // Initialize Mobile-Native Focused Cockpit Manager early so layout state is available
+    this.mobileLayoutManager = new MobileLayoutManager();
+
     this.initViewMode();
     this.initLanguageSelector();
     this.initAudioBanner();
@@ -47,11 +51,6 @@ class HarmonixApp {
     this.initGlobalControls();
     this.initLiveHud();
     this.switchTab('games');
-
-    // Initialize Mobile-Native Focused Cockpit Manager
-    this.mobileLayoutManager = new MobileLayoutManager();
-    const isMobile = document.documentElement.getAttribute('data-is-mobile') === 'true';
-    this.mobileLayoutManager.updateMobileState(isMobile);
   }
 
   initViewMode() {
@@ -74,32 +73,38 @@ class HarmonixApp {
       }
     };
 
+    let isApplying = false;
+    let lastEffectiveMobile = null;
+
     const applyViewMode = () => {
-      const root = document.documentElement;
-      const isSmallScreen = typeof window !== 'undefined' && window.innerWidth <= 768;
-      let effectiveMobile = false;
+      if (isApplying) return;
+      isApplying = true;
+      try {
+        const root = document.documentElement;
+        const isSmallScreen = typeof window !== 'undefined' && window.innerWidth <= 768;
+        let effectiveMobile = false;
 
-      if (this.viewMode === 'mobile') {
-        effectiveMobile = true;
-      } else if (this.viewMode === 'desktop') {
-        effectiveMobile = false;
-      } else {
-        effectiveMobile = isSmallScreen;
-      }
+        if (this.viewMode === 'mobile') {
+          effectiveMobile = true;
+        } else if (this.viewMode === 'desktop') {
+          effectiveMobile = false;
+        } else {
+          effectiveMobile = isSmallScreen;
+        }
 
-      root.setAttribute('data-view-mode', this.viewMode);
-      root.setAttribute('data-is-mobile', effectiveMobile ? 'true' : 'false');
-      
-      if (select && select.value !== this.viewMode) {
-        select.value = this.viewMode;
-      }
+        root.setAttribute('data-view-mode', this.viewMode);
+        root.setAttribute('data-is-mobile', effectiveMobile ? 'true' : 'false');
+        
+        if (select && select.value !== this.viewMode) {
+          select.value = this.viewMode;
+        }
 
-      if (this.mobileLayoutManager) {
-        this.mobileLayoutManager.updateMobileState(effectiveMobile);
-      }
-
-      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
-        window.dispatchEvent(new Event('resize'));
+        if (this.mobileLayoutManager && (lastEffectiveMobile !== effectiveMobile)) {
+          this.mobileLayoutManager.updateMobileState(effectiveMobile);
+        }
+        lastEffectiveMobile = effectiveMobile;
+      } finally {
+        isApplying = false;
       }
     };
 
@@ -123,9 +128,20 @@ class HarmonixApp {
       else if (mql.addListener) mql.addListener(mediaHandler);
     }
 
+    let resizeTimer = null;
+    let lastSmallScreen = typeof window !== 'undefined' ? window.innerWidth <= 768 : false;
+
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', () => {
-        if (this.viewMode === 'auto') applyViewMode();
+        if (this.viewMode !== 'auto') return;
+        const isSmall = window.innerWidth <= 768;
+        if (isSmall !== lastSmallScreen) {
+          lastSmallScreen = isSmall;
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            applyViewMode();
+          }, 100);
+        }
       });
     }
 
