@@ -85,7 +85,7 @@ export class PolyrhythmTap {
         hintKey: 'games.hintStage1Right',
         speedTierKey: null,
         bpm: 72,
-        hitsNeeded: 8,
+        hitsNeeded: 20,
         hands: 'right'
       },
       2: {
@@ -96,7 +96,7 @@ export class PolyrhythmTap {
         hintKey: 'games.hintStage1Left',
         speedTierKey: null,
         bpm: 72,
-        hitsNeeded: 8,
+        hitsNeeded: 24,
         hands: 'left'
       },
       3: {
@@ -107,7 +107,7 @@ export class PolyrhythmTap {
         hintKey: 'games.hintStage2',
         speedTierKey: null,
         bpm: 72,
-        hitsNeeded: 16,
+        hitsNeeded: 36,
         hands: 'both'
       },
       4: {
@@ -118,7 +118,7 @@ export class PolyrhythmTap {
         hintKey: 'games.hintStage3',
         speedTierKey: null,
         bpm: 72,
-        hitsNeeded: 32, // Doubled duration from 16 to 32 hits!
+        hitsNeeded: 48,
         hands: 'both',
         ghost: true
       },
@@ -130,7 +130,7 @@ export class PolyrhythmTap {
         hintKey: 'games.hintStage4A',
         speedTierKey: 'games.speedTier1',
         bpm: 90,
-        hitsNeeded: 12,
+        hitsNeeded: 24,
         hands: 'both'
       },
       6: {
@@ -141,7 +141,7 @@ export class PolyrhythmTap {
         hintKey: 'games.hintStage4B',
         speedTierKey: 'games.speedTier2',
         bpm: 120,
-        hitsNeeded: 12,
+        hitsNeeded: 30,
         hands: 'both'
       },
       7: {
@@ -152,7 +152,7 @@ export class PolyrhythmTap {
         hintKey: 'games.hintStage4C',
         speedTierKey: 'games.speedTier3',
         bpm: 144,
-        hitsNeeded: 12,
+        hitsNeeded: 36,
         hands: 'both'
       }
     };
@@ -245,6 +245,62 @@ export class PolyrhythmTap {
                 <span id="cdDemoText">${i18n.t('games.rhythmDemo')}</span>
               </div>
               <div class="countdown-big-num" id="cdBigNum">3</div>
+            </div>
+          </div>
+
+          <!-- Arcade Settlement / Victory Performance Screen -->
+          <div class="settlement-overlay" id="settlementOverlay" style="display: none;">
+            <div class="settlement-card">
+              <div class="settlement-header">
+                <span class="settlement-badge" data-i18n="games.stageClear">★ STAGE CLEAR! ★</span>
+                <h2 class="settlement-title" data-i18n="games.settlementTitle">${i18n.t('games.settlementTitle')}</h2>
+              </div>
+
+              <div class="settlement-rank-container">
+                <div class="settlement-rank-circle rank-sss" id="settlementRankCircle">
+                  <span class="settlement-rank-letter" id="settlementRankLetter">SSS</span>
+                </div>
+                <div class="settlement-rank-title" id="settlementRankTitle" data-i18n="games.rankGod">${i18n.t('games.rankGod')}</div>
+              </div>
+
+              <div class="settlement-stats-grid">
+                <div class="settlement-stat-item">
+                  <span class="settlement-stat-label" data-i18n="games.finalScore">${i18n.t('games.finalScore')}</span>
+                  <span class="settlement-stat-val text-amber" id="settlementScore">0</span>
+                </div>
+                <div class="settlement-stat-item">
+                  <span class="settlement-stat-label" data-i18n="games.maxCombo">${i18n.t('games.maxCombo')}</span>
+                  <span class="settlement-stat-val text-cyan" id="settlementMaxCombo">0x</span>
+                </div>
+                <div class="settlement-stat-item">
+                  <span class="settlement-stat-label" data-i18n="games.accuracy">${i18n.t('games.accuracy')}</span>
+                  <span class="settlement-stat-val text-emerald" id="settlementAccuracy">100%</span>
+                </div>
+                <div class="settlement-stat-item">
+                  <span class="settlement-stat-label" data-i18n="games.totalHits">${i18n.t('games.totalHits')}</span>
+                  <span class="settlement-stat-val text-violet" id="settlementTotalHits">0</span>
+                </div>
+              </div>
+
+              <div class="settlement-judgments-row">
+                <div class="judgment-badge badge-perfect">
+                  <span class="j-label">PERFECT</span>
+                  <span class="j-count" id="settlementPerfects">0</span>
+                </div>
+                <div class="judgment-badge badge-good">
+                  <span class="j-label">GOOD</span>
+                  <span class="j-count" id="settlementGoods">0</span>
+                </div>
+                <div class="judgment-badge badge-miss">
+                  <span class="j-label">MISS</span>
+                  <span class="j-count" id="settlementMisses">0</span>
+                </div>
+              </div>
+
+              <div class="settlement-actions">
+                <button class="btn btn-primary btn-lg" id="btnSettlementReplay" data-i18n="games.playAgain">▶ ${i18n.t('games.playAgain')}</button>
+                <button class="btn btn-pill" id="btnSettlementDiff">🔄 ${this.r1 === 3 ? '4:3 Hard' : '3:2 Normal'}</button>
+              </div>
             </div>
           </div>
         </div>
@@ -366,6 +422,32 @@ export class PolyrhythmTap {
         this.flashPad('#padRight');
       });
     }
+
+    const btnReplay = this.container.querySelector('#btnSettlementReplay');
+    if (btnReplay) {
+      btnReplay.addEventListener('click', () => {
+        const overlay = this.container.querySelector('#settlementOverlay');
+        if (overlay) overlay.style.display = 'none';
+        this.start();
+      });
+    }
+
+    const btnDiff = this.container.querySelector('#btnSettlementDiff');
+    if (btnDiff) {
+      btnDiff.addEventListener('click', () => {
+        const overlay = this.container.querySelector('#settlementOverlay');
+        if (overlay) overlay.style.display = 'none';
+        const targetR1 = this.r1 === 3 ? 4 : 3;
+        const targetBtn = this.container.querySelector(`.rhythm-mode-select button[data-r1="${targetR1}"]`);
+        if (targetBtn) {
+          targetBtn.click();
+        } else {
+          this.r1 = targetR1;
+          this.r2 = targetR1 === 4 ? 3 : 2;
+        }
+        this.start();
+      });
+    }
   }
 
   flashPad(selector) {
@@ -423,40 +505,45 @@ export class PolyrhythmTap {
     this.updatePadsState();
     this.updateStatsUI();
 
-    // Play 1 measure (cycleDuration) of rhythm demo
+    // Play 2 full measures of rhythm demo so the player can comfortably internalize the pulse
     const measureMs = this.cycleDuration * 1000;
+    const demoMeasures = 2;
+    const totalDemoMs = measureMs * demoMeasures;
     const hands = config.hands;
     const r1 = this.r1;
     const r2 = this.r2;
 
-    // Schedule demonstration clicks
-    if (hands === 'right' || hands === 'both') {
-      for (let i = 0; i < r2; i++) {
-        const delay = (i / r2) * measureMs;
-        const timerId = setTimeout(() => {
-          if (!this.isPlaying) return;
-          instruments.playDrum('clave', null, 0.95);
-          this.flashPad('#padRight');
-        }, delay);
-        this.countdownTimers.push(timerId);
+    for (let m = 0; m < demoMeasures; m++) {
+      const measureOffset = m * measureMs;
+      // Schedule demonstration clicks
+      if (hands === 'right' || hands === 'both') {
+        for (let i = 0; i < r2; i++) {
+          const delay = measureOffset + (i / r2) * measureMs;
+          const timerId = setTimeout(() => {
+            if (!this.isPlaying) return;
+            instruments.playDrum('clave', null, 0.95);
+            this.flashPad('#padRight');
+          }, delay);
+          this.countdownTimers.push(timerId);
+        }
+      }
+
+      if (hands === 'left' || hands === 'both') {
+        for (let i = 0; i < r1; i++) {
+          const delay = measureOffset + (i / r1) * measureMs;
+          const timerId = setTimeout(() => {
+            if (!this.isPlaying) return;
+            instruments.playDrum('woodblock', null, 0.95);
+            this.flashPad('#padLeft');
+          }, delay);
+          this.countdownTimers.push(timerId);
+        }
       }
     }
 
-    if (hands === 'left' || hands === 'both') {
-      for (let i = 0; i < r1; i++) {
-        const delay = (i / r1) * measureMs;
-        const timerId = setTimeout(() => {
-          if (!this.isPlaying) return;
-          instruments.playDrum('woodblock', null, 0.95);
-          this.flashPad('#padLeft');
-        }, delay);
-        this.countdownTimers.push(timerId);
-      }
-    }
-
-    // After rhythm example finishes (measureMs + short buffer ~250ms), begin 3-2-1 countdown
-    const cdStartDelay = Math.max(1200, measureMs + 250);
-    const stepDelay = 650; // ms per countdown step
+    // After 2-measure rhythm demonstration finishes, begin relaxed 3-2-1 countdown
+    const cdStartDelay = Math.max(1800, totalDemoMs + 350);
+    const stepDelay = 850; // Relaxed from 650ms to 850ms so players have time to prepare
 
     // Tick 3
     const t3 = setTimeout(() => {
@@ -512,7 +599,7 @@ export class PolyrhythmTap {
       if (overlay) overlay.style.display = 'none';
       this.isCountingDown = false;
       this.cycleStartTime = performance.now() / 1000;
-    }, cdStartDelay + stepDelay * 3 + 450);
+    }, cdStartDelay + stepDelay * 3 + 550);
     this.countdownTimers.push(tEnd);
   }
 
@@ -520,6 +607,8 @@ export class PolyrhythmTap {
     audioEngine.requestPlayback('polyrhythmTap', () => this.stop());
     this.isPlaying = true;
     this.isVictory = false;
+    const settlement = this.container ? this.container.querySelector('#settlementOverlay') : null;
+    if (settlement) settlement.style.display = 'none';
     this.score = 0;
     this.combo = 0;
     this.maxCombo = 0;
@@ -562,6 +651,9 @@ export class PolyrhythmTap {
     if (this.animId && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(this.animId);
     audioEngine.releasePlayback('polyrhythmTap');
 
+    const settlement = this.container ? this.container.querySelector('#settlementOverlay') : null;
+    if (settlement) settlement.style.display = 'none';
+
     const startBtn = this.container.querySelector('#btnStartGame');
     if (startBtn) {
       startBtn.textContent = `▶ ${i18n.t('games.startGame')}`;
@@ -585,23 +677,8 @@ export class PolyrhythmTap {
     const nextIndex = this.stageIndex + 1;
 
     if (nextIndex > 7) {
-      // Completed Stage 7 (4C: 144 BPM) -> VICTORY!
-      this.isVictory = true;
-      this.isPlaying = false;
-      this.clearCountdown();
-      if (this.animId && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(this.animId);
-      this.triggerBanner(i18n.t('games.victory'), i18n.t('games.finalRank'));
-
-      const startBtn = this.container.querySelector('#btnStartGame');
-      if (startBtn) {
-        startBtn.textContent = `▶ ${i18n.t('games.playAgain')}`;
-        startBtn.setAttribute('data-i18n', 'games.playAgain');
-        startBtn.classList.remove('btn-danger');
-        startBtn.classList.add('btn-primary');
-      }
-
-      this.updatePadsState();
-      this.updateStatsUI();
+      // Completed Stage 7 (4C: 144 BPM) -> Show full arcade victory settlement screen!
+      this.showSettlementScreen();
       return;
     }
 
@@ -614,6 +691,115 @@ export class PolyrhythmTap {
 
     // Trigger rhythmic demo & 3-2-1 countdown for new stage/speed
     this.triggerStageCountdown(config);
+  }
+
+  showSettlementScreen() {
+    this.isVictory = true;
+    this.isPlaying = false;
+    this.clearCountdown();
+    audioEngine.releasePlayback('polyrhythmTap');
+
+    // Synthesize victory fanfare arpeggio (C5 - E5 - G5 - C6)
+    try {
+      const fanfareNotes = [523.25, 659.25, 783.99, 1046.50];
+      fanfareNotes.forEach((freq, i) => {
+        setTimeout(() => {
+          instruments.playTone(freq, 0.45, 'triangle', null, 0.35);
+        }, i * 110);
+      });
+      setTimeout(() => {
+        instruments.playDrum('clave', null, 0.95);
+      }, 440);
+    } catch (e) {}
+
+    // Compute accuracy & rank
+    const total = Math.max(1, this.totalHits);
+    const accScore = ((this.totalPerfects * 100 + this.totalGoods * 60) / total);
+    const accPercent = Math.min(100, Math.max(0, accScore)).toFixed(1);
+
+    let rankLetter = 'B';
+    let rankTitleKey = 'games.rankNovice';
+    let rankClass = 'rank-b';
+
+    if (accScore >= 95) {
+      rankLetter = 'SSS';
+      rankTitleKey = 'games.rankGod';
+      rankClass = 'rank-sss';
+    } else if (accScore >= 85) {
+      rankLetter = 'S';
+      rankTitleKey = 'games.rankMaster';
+      rankClass = 'rank-s';
+    } else if (accScore >= 70) {
+      rankLetter = 'A';
+      rankTitleKey = 'games.rankPro';
+      rankClass = 'rank-a';
+    }
+
+    // Populate settlement overlay
+    const overlay = this.container.querySelector('#settlementOverlay');
+    if (overlay) {
+      const rankCircle = overlay.querySelector('#settlementRankCircle');
+      const rankLetterEl = overlay.querySelector('#settlementRankLetter');
+      const rankTitleEl = overlay.querySelector('#settlementRankTitle');
+
+      if (rankCircle) rankCircle.className = `settlement-rank-circle ${rankClass}`;
+      if (rankLetterEl) rankLetterEl.textContent = rankLetter;
+      if (rankTitleEl) {
+        rankTitleEl.textContent = i18n.t(rankTitleKey);
+        rankTitleEl.setAttribute('data-i18n', rankTitleKey);
+      }
+
+      const scoreEl = overlay.querySelector('#settlementScore');
+      if (scoreEl) scoreEl.textContent = this.score.toLocaleString();
+
+      const comboEl = overlay.querySelector('#settlementMaxCombo');
+      if (comboEl) comboEl.textContent = `${this.maxCombo}x`;
+
+      const accEl = overlay.querySelector('#settlementAccuracy');
+      if (accEl) accEl.textContent = `${accPercent}%`;
+
+      const hitsEl = overlay.querySelector('#settlementTotalHits');
+      if (hitsEl) hitsEl.textContent = this.totalHits;
+
+      const pEl = overlay.querySelector('#settlementPerfects');
+      if (pEl) pEl.textContent = this.totalPerfects;
+
+      const gEl = overlay.querySelector('#settlementGoods');
+      if (gEl) gEl.textContent = this.totalGoods;
+
+      const mEl = overlay.querySelector('#settlementMisses');
+      if (mEl) mEl.textContent = this.totalMisses;
+
+      const diffBtn = overlay.querySelector('#btnSettlementDiff');
+      if (diffBtn) {
+        diffBtn.textContent = this.r1 === 3 ? `🔄 ${i18n.t('games.hard43')}` : `🔄 ${i18n.t('games.normal32')}`;
+      }
+
+      overlay.style.display = 'flex';
+    }
+
+    // Update transport button
+    const startBtn = this.container.querySelector('#btnStartGame');
+    if (startBtn) {
+      startBtn.textContent = `▶ ${i18n.t('games.playAgain')}`;
+      startBtn.setAttribute('data-i18n', 'games.playAgain');
+      startBtn.classList.remove('btn-danger');
+      startBtn.classList.add('btn-primary');
+    }
+
+    // Spawn celebratory fireworks on canvas
+    for (let f = 0; f < 8; f++) {
+      setTimeout(() => {
+        const cx = 150 + Math.random() * 460;
+        const cy = 60 + Math.random() * 120;
+        const col = f % 2 === 0 ? '#00f2fe' : (f % 3 === 0 ? '#f59e0b' : '#a855f7');
+        this.spawnParticles(cx, cy, col, 35);
+        this.spawnShockwave(cx, cy, col);
+      }, f * 180);
+    }
+
+    this.updatePadsState();
+    this.updateStatsUI();
   }
 
   triggerBanner(title, sub) {

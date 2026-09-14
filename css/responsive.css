@@ -509,9 +509,9 @@ html[data-is-mobile="true"] .matrix-grid-container,
 }
 
 /* 3.7 Visualizers, Canvases, 16 Drawbars, Ladders, Piano */
-html[data-is-mobile="true"] .drawbars-container,
 @media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .drawbars-container {
+  html:not([data-view-mode="desktop"]) .drawbars-container,
+  html[data-is-mobile="true"] .drawbars-container {
     height: 220px;
     padding: 0.5rem 0.25rem 0.25rem;
     overflow-x: auto;
@@ -519,31 +519,33 @@ html[data-is-mobile="true"] .drawbars-container,
     gap: 2px;
   }
 
-  html:not([data-view-mode="desktop"]) .drawbar-col {
+  html:not([data-view-mode="desktop"]) .drawbar-col,
+  html[data-is-mobile="true"] .drawbar-col {
     min-width: 26px;
   }
 
-  html:not([data-view-mode="desktop"]) .drawbar-col input[type="range"].vertical-drawbar {
-    width: 18px !important;
-    height: 125px !important;
+  html:not([data-view-mode="desktop"]) .drawbar-col input[type="range"].vertical-drawbar,
+  html[data-is-mobile="true"] .drawbar-col input[type="range"].vertical-drawbar {
+    width: 22px !important;
+    height: 140px !important;
   }
 
-  html:not([data-view-mode="desktop"]) .drawbar-label {
+  html:not([data-view-mode="desktop"]) .drawbar-label,
+  html[data-is-mobile="true"] .drawbar-label {
     font-size: 0.65rem;
   }
 
-  html:not([data-view-mode="desktop"]) .drawbar-val {
+  html:not([data-view-mode="desktop"]) .drawbar-val,
+  html[data-is-mobile="true"] .drawbar-val {
     font-size: 0.6rem;
   }
-}
 
-html[data-is-mobile="true"] .harmonics-ladder,
-html[data-is-mobile="true"] .brightness-ladder,
-html[data-is-mobile="true"] .traditions-list,
-@media (max-width: 768px) {
   html:not([data-view-mode="desktop"]) .harmonics-ladder,
   html:not([data-view-mode="desktop"]) .brightness-ladder,
-  html:not([data-view-mode="desktop"]) .traditions-list {
+  html:not([data-view-mode="desktop"]) .traditions-list,
+  html[data-is-mobile="true"] .harmonics-ladder,
+  html[data-is-mobile="true"] .brightness-ladder,
+  html[data-is-mobile="true"] .traditions-list {
     max-height: 320px;
   }
 
@@ -566,17 +568,16 @@ html[data-is-mobile="true"] .traditions-list,
   html:not([data-view-mode="desktop"]) .harmonic-meta {
     font-size: 0.72rem;
   }
-}
 
-html[data-is-mobile="true"] .piano-wrapper,
-@media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .piano-wrapper {
+  html:not([data-view-mode="desktop"]) .piano-wrapper,
+  html[data-is-mobile="true"] .piano-wrapper {
     padding: 0.5rem;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  html:not([data-view-mode="desktop"]) .piano-keyboard {
+  html:not([data-view-mode="desktop"]) .piano-keyboard,
+  html[data-is-mobile="true"] .piano-keyboard {
     height: 115px;
     min-width: 320px;
   }
@@ -584,11 +585,9 @@ html[data-is-mobile="true"] .piano-wrapper,
   html:not([data-view-mode="desktop"]) .white-key .key-label {
     font-size: 0.72rem;
   }
-}
 
-html[data-is-mobile="true"] .physics-stats,
-@media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .physics-stats {
+  html:not([data-view-mode="desktop"]) .physics-stats,
+  html[data-is-mobile="true"] .physics-stats {
     font-size: 0.75rem;
     padding: 0.4rem 0.65rem;
     gap: 0.5rem;
@@ -640,9 +639,10 @@ html[data-is-mobile="true"] .physics-stats,
    ========================================================================== */
 
 /* 4.1 Sub-Lab Navigator (.mobile-subnav) */
-html[data-is-mobile="true"] .mobile-subnav,
+/* 4.1 Sub-Lab Navigator (.mobile-subnav) */
 @media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .mobile-subnav {
+  html:not([data-view-mode="desktop"]) .mobile-subnav,
+  html[data-is-mobile="true"] .mobile-subnav {
     display: flex;
     align-items: center;
     gap: 0.45rem;
@@ -660,18 +660,14 @@ html[data-is-mobile="true"] .mobile-subnav,
     z-index: 75;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   }
-}
 
-html[data-is-mobile="true"] .mobile-subnav::-webkit-scrollbar,
-@media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .mobile-subnav::-webkit-scrollbar {
+  html:not([data-view-mode="desktop"]) .mobile-subnav::-webkit-scrollbar,
+  html[data-is-mobile="true"] .mobile-subnav::-webkit-scrollbar {
     display: none;
   }
-}
 
-html[data-is-mobile="true"] .mobile-subnav-btn,
-@media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .mobile-subnav-btn {
+  html:not([data-view-mode="desktop"]) .mobile-subnav-btn,
+  html[data-is-mobile="true"] .mobile-subnav-btn {
     flex: 0 0 auto;
     background: transparent;
     border: 1px solid transparent;
@@ -685,23 +681,23 @@ html[data-is-mobile="true"] .mobile-subnav-btn,
     transition: all 0.2s ease;
   }
 
-  html:not([data-view-mode="desktop"]) .mobile-subnav-btn:hover {
+  html:not([data-view-mode="desktop"]) .mobile-subnav-btn:hover,
+  html[data-is-mobile="true"] .mobile-subnav-btn:hover {
     color: var(--text-main);
     background: rgba(255, 255, 255, 0.06);
   }
 
-  html:not([data-view-mode="desktop"]) .mobile-subnav-btn.active {
+  html:not([data-view-mode="desktop"]) .mobile-subnav-btn.active,
+  html[data-is-mobile="true"] .mobile-subnav-btn.active {
     background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(139, 92, 246, 0.25));
     border-color: var(--accent-cyan);
     color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 242, 254, 0.35);
   }
-}
 
-/* 4.2 Multi-Panel Segmented Switcher (.mobile-panel-switcher) */
-html[data-is-mobile="true"] .mobile-panel-switcher,
-@media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .mobile-panel-switcher {
+  /* 4.2 Multi-Panel Segmented Switcher (.mobile-panel-switcher) */
+  html:not([data-view-mode="desktop"]) .mobile-panel-switcher,
+  html[data-is-mobile="true"] .mobile-panel-switcher {
     display: flex;
     background: rgba(15, 23, 42, 0.85);
     border: 1px solid var(--border-subtle);
@@ -711,7 +707,8 @@ html[data-is-mobile="true"] .mobile-panel-switcher,
     margin-bottom: 0.85rem;
   }
 
-  html:not([data-view-mode="desktop"]) .mobile-switcher-btn {
+  html:not([data-view-mode="desktop"]) .mobile-switcher-btn,
+  html[data-is-mobile="true"] .mobile-switcher-btn {
     flex: 1;
     background: transparent;
     border: none;
@@ -726,22 +723,22 @@ html[data-is-mobile="true"] .mobile-panel-switcher,
     white-space: nowrap;
   }
 
-  html:not([data-view-mode="desktop"]) .mobile-switcher-btn.active {
+  html:not([data-view-mode="desktop"]) .mobile-switcher-btn.active,
+  html[data-is-mobile="true"] .mobile-switcher-btn.active {
     background: var(--accent-cyan);
     color: #040812;
     font-weight: 700;
     box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
   }
-}
 
-/* 4.3 Theory Callout - Compact, readable, always preserved */
-html[data-is-mobile="true"] .mobile-theory-toggle,
-@media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .mobile-theory-toggle {
+  /* 4.3 Theory Callout - Compact, readable, always preserved */
+  html:not([data-view-mode="desktop"]) .mobile-theory-toggle,
+  html[data-is-mobile="true"] .mobile-theory-toggle {
     display: none !important;
   }
 
-  html:not([data-view-mode="desktop"]) .theory-callout {
+  html:not([data-view-mode="desktop"]) .theory-callout,
+  html[data-is-mobile="true"] .theory-callout {
     display: block !important;
     margin-top: 0.75rem;
     padding: 0.75rem 0.85rem;
@@ -751,12 +748,10 @@ html[data-is-mobile="true"] .mobile-theory-toggle,
     border-left: 3px solid var(--accent-cyan);
     border-radius: var(--radius-sm);
   }
-}
 
-/* 4.4 Compact Stage & Canvas heights for Single-Screen Viewing */
-html[data-is-mobile="true"] .canvas-wrapper,
-@media (max-width: 768px) {
-  html:not([data-view-mode="desktop"]) .canvas-wrapper {
+  /* 4.4 Compact Stage & Canvas heights for Single-Screen Viewing */
+  html:not([data-view-mode="desktop"]) .canvas-wrapper,
+  html[data-is-mobile="true"] .canvas-wrapper {
     padding: 0.45rem;
     margin-bottom: 0.65rem;
   }
@@ -797,12 +792,12 @@ html[data-is-mobile="true"] .canvas-wrapper,
 
   /* 16-Drawbars compact single-screen integration */
   html:not([data-view-mode="desktop"]) .drawbars-container {
-    height: 180px;
-    padding: 0.4rem 0.25rem 0.2rem;
+    height: 210px;
+    padding: 0.5rem 0.25rem 0.25rem;
   }
 
   html:not([data-view-mode="desktop"]) .drawbar-col input[type="range"].vertical-drawbar {
-    height: 100px !important;
+    height: 135px !important;
   }
 
   /* Polyrhythm Tap Hero 100% viewport optimization */
